@@ -203,8 +203,8 @@ function generatorReject({generatorId}) {
   containers.get(generatorId).reject();
 }
 
-function hasPrivateKey({keyringId, fingerprint}) {
-  return controllerPort.send('has-private-key', {keyringId, fingerprint});
+function hasPrivateKey({keyringId, fingerprint, email}) {
+  return controllerPort.send('has-private-key', {keyringId, fingerprint, email});
 }
 
 function editorEncrypt({editorId, recipients}) {
