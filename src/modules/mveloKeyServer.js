@@ -83,11 +83,15 @@ export async function fetch(options) {
  * @param {string} options.publicKeyArmored   The ascii armored key block
  * @yield {undefined}
  */
-export async function upload({publicKeyArmored}) {
+export async function upload({email, publicKeyArmored}) {
+  const body = {publicKeyArmored};
+  if (email) {
+    body.emails = [email];
+  }
   const response = await window.fetch(url(), {
     method: 'POST',
     headers: new Headers({'Content-Type': 'application/json'}),
-    body: JSON.stringify({publicKeyArmored})
+    body: JSON.stringify(body)
   });
   checkStatus(response);
 }

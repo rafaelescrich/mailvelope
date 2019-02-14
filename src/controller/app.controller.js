@@ -145,14 +145,20 @@ export default class AppController extends sub.SubController {
     return result;
   }
 
-  async syncKeyServer({fingerprint, keyringId, sync}) {
+  async syncKeyServer({email, fingerprint, keyringId, sync}) {
     let result;
     const privateKey = keyringById(keyringId).getPrivateKeyByFpr(fingerprint);
     if (sync) {
-      result = await mveloKeyServer.upload({publicKeyArmored: privateKey.toPublic().armor()});
+      result = await mveloKeyServer.upload({email, publicKeyArmored: privateKey.toPublic().armor()});
     } else {
-      const keyId = privateKey.primaryKey.getKeyId().toHex();
-      result = await mveloKeyServer.remove({keyId});
+      let options;
+      if (email) {
+        options = {email};
+      } else {
+        const keyId = privateKey.primaryKey.getKeyId().toHex();
+        options = {keyId};
+      }
+      result = await mveloKeyServer.remove(options);
     }
     return result;
   }
